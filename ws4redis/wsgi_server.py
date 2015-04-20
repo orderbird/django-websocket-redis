@@ -111,16 +111,16 @@ class WebsocketWSGIServer(object):
             response = http.HttpResponse(status=1001, content='Websocket Closed')
         except UpgradeRequiredError as excpt:
             logger.info('Websocket upgrade required')
-            response = http.HttpResponseBadRequest(status=426, content=excpt)
+            response = http.HttpResponseBadRequest(status=426, content=str(excpt))
         except HandshakeError as excpt:
             logger.warning('HandshakeError: {}'.format(excpt), exc_info=sys.exc_info())
-            response = http.HttpResponseBadRequest(content=excpt)
+            response = http.HttpResponseBadRequest(content=str(excpt))
         except PermissionDenied as excpt:
             logger.warning('PermissionDenied: {}'.format(excpt), exc_info=sys.exc_info())
-            response = http.HttpResponseForbidden(content=excpt)
+            response = http.HttpResponseForbidden(content=str(excpt))
         except Exception as excpt:
             logger.error('Other Exception: {}'.format(excpt), exc_info=sys.exc_info())
-            response = http.HttpResponseServerError(content=excpt)
+            response = http.HttpResponseServerError(content=str(excpt))
         else:
             response = http.HttpResponse()
         finally:
