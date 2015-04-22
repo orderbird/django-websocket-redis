@@ -32,15 +32,18 @@ class WebsocketRunServer(WebsocketWSGIServer):
             raise HandshakeError('Unsupported WebSocket Version: {0}'.format(websocket_version))
 
         key = environ.get('HTTP_SEC_WEBSOCKET_KEY', '').strip()
+
         if not key:
             raise HandshakeError('Sec-WebSocket-Key header is missing/empty')
         try:
             key_len = len(base64.b64decode(key))
         except TypeError:
             raise HandshakeError('Invalid key: {0}'.format(key))
+        """
         if key_len != 16:
             # 5.2.1 (3)
             raise HandshakeError('Invalid key: {0}'.format(key))
+        """
 
         sec_ws_accept = base64.b64encode(sha1(six.b(key) + self.WS_GUID).digest())
         if six.PY3:
